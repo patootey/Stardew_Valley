@@ -5,47 +5,87 @@
 #include <vector>
 using namespace std;
 
-void readAllNames();
+void readAllNames(const string &filename);
+void readSingularName(const string &filename, int index);
+int countLines(const string &filename);
 void menu();
 
 int main() {
-
+    string filename = "names.txt";
+    int totalLines = countLines(filename);
     char command;
     menu();
-    command = lesChar("Write a command");
+    command = readChar("Write a command");
 
     while (command != 'Q') {
         switch (command) {
         case 'A':
-            readAllNames();
+            readAllNames(filename);
             break;
 
         case 'S':
-            // read a singular name
+            int nameIndex;
+            nameIndex = readInt("Write index of the name: ", 1, totalLines);
+            readSingularName(filename, nameIndex);
             break;
         default:
             menu();
             break;
         }
-        command = lesChar("Write a command: ");
+        command = readChar("Write a command: ");
     }
 
     return 0;
 }
 
-void readAllNames() {
+void readAllNames(const string &filename) {
     // Read from the file
     string nameText;
-    ifstream namefile("names.txt");
+    ifstream namefile(filename);
     if (namefile.is_open()) {
         while (getline(namefile, nameText)) {
-            cout << nameText << '\n';
+            cout << "Name: " << nameText << '\n';
         }
         namefile.close();
     }
 
     else
         cout << "Unable to open file";
+}
+
+void readSingularName(const string &filename, int index) {
+    string nameText;
+    ifstream namefile(filename);
+    if (namefile.is_open()) {
+        int currentLine = 1;
+        while (getline(namefile, nameText)) {
+            if (currentLine == index) {
+                cout << nameText << '\n';
+            }
+            currentLine++;
+        }
+        namefile.close();
+    }
+
+    else
+        cout << "Unable to open file";
+}
+
+int countLines(const string &filename) {
+    ifstream file(filename);
+    int lineCount = 0;
+    string line;
+
+    if (file.is_open()) {
+        while (getline(file, line)) {
+            lineCount++;
+        }
+        file.close();
+    } else {
+        cout << "Unable to open file" << endl;
+    }
+
+    return lineCount;
 }
 
 void menu() {

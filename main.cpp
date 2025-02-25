@@ -37,8 +37,7 @@ int main() {
             break;
         case 'B':
             int seasonIndex;
-            seasonIndex =
-                readInt("What season do you want? (Spring/Summer/Fall/Winter)", 1, SEASONS);
+            seasonIndex = readInt("What season do you want? (Spring/Summer/Fall/Winter)", 1, SEASONS);
             readFileBundle(foraging_bundle, seasonIndex);
             // print out each bundle to the right season
             break;

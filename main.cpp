@@ -5,14 +5,19 @@
 #include <vector>
 using namespace std;
 
-void readAllNames(const string &filename);
-void readSingularName(const string &filename, int index);
+const int SEASONS = 4;
+
+void readFile(const string &filename);
+void readFileLine(const string &filename, int index);
+void readFileBundle(const string &filename,int index);
 int countLines(const string &filename);
 void menu();
 
 int main() {
-    string filename = "names.txt";
-    int totalLines = countLines(filename);
+    string villagerNames = "villagers.txt";
+    string season = "seasons.txt";
+    string foraging_bundle = "foraging_bundle.txt";
+    int totalLines = countLines(villagerNames);
     char command;
     menu();
     command = readChar("Write a command");
@@ -20,13 +25,21 @@ int main() {
     while (command != 'Q') {
         switch (command) {
         case 'A':
-            readAllNames(filename);
+            readFile(villagerNames);
             break;
-
-        case 'S':
+        case 'N':
             int nameIndex;
             nameIndex = readInt("Write index of the name: ", 1, totalLines);
-            readSingularName(filename, nameIndex);
+            readFileLine(villagerNames, nameIndex);
+            break;
+        case 'S':
+            readFile(season);
+            break;
+        case 'B':
+            int seasonIndex;
+            seasonIndex = readInt("What season do you want? (Spring/Summer/Fall/Winter)", 1, SEASONS);
+            readFileBundle(foraging_bundle,seasonIndex);
+            // print out each bundle to the right season
             break;
         default:
             menu();
@@ -38,33 +51,66 @@ int main() {
     return 0;
 }
 
-void readAllNames(const string &filename) {
-    // Read from the file
-    string nameText;
-    ifstream namefile(filename);
-    if (namefile.is_open()) {
-        while (getline(namefile, nameText)) {
-            cout << "Name: " << nameText << '\n';
+void readFileBundle(const string &filename,int index){
+    ifstream file(filename);
+    string line;
+    bool found = false;
+
+    if (file.is_open()) {
+        while (getline(file, line)) {
+            // Check if the line is a number (section identifier)
+            if (!line.empty() && isdigit(line[0])) {
+                int section = stoi(line); // Convert string to integer
+
+                if (section == index) {
+                    found = true;
+                    continue; // Skip printing the section number
+                } else if (found) {
+                    break; // Stop when the next section number is found
+                }
+            }
+
+            if (found) {
+                cout << line << '\n';
+            }
         }
-        namefile.close();
+        file.close();
+
+        if (!found) {
+            cout << "Section " << index << " not found.\n";
+        }
+    } else {
+        cout << "Unable to open file.\n";
+    }
+}
+
+void readFile(const string &filename) {
+    // Read from the file
+    ifstream file(filename);
+    string line;
+    if (file.is_open()) {
+        while (getline(file, line)) {
+            cout << line << '\n';
+        }
+        file.close();
     }
 
     else
         cout << "Unable to open file";
 }
 
-void readSingularName(const string &filename, int index) {
-    string nameText;
-    ifstream namefile(filename);
-    if (namefile.is_open()) {
+void readFileLine(const string &filename, int index) {
+    ifstream file(filename);
+    string line;
+    if (file.is_open()) {
         int currentLine = 1;
-        while (getline(namefile, nameText)) {
+        while (getline(file, line)) {
             if (currentLine == index) {
-                cout << nameText << '\n';
+                cout << line << '\n';
             }
             currentLine++;
         }
-        namefile.close();
+        file.close();
     }
 
     else
@@ -73,8 +119,8 @@ void readSingularName(const string &filename, int index) {
 
 int countLines(const string &filename) {
     ifstream file(filename);
-    int lineCount = 0;
     string line;
+    int lineCount = 0;
 
     if (file.is_open()) {
         while (getline(file, line)) {
@@ -89,6 +135,9 @@ int countLines(const string &filename) {
 }
 
 void menu() {
-    cout << "This the menu choices: " << "A: Read all the villager names"
-         << "S: read a singular villager name" << endl;
+    cout << "This the menu choices \n"
+         << "A: Read all the villager names\n"
+         << "N: read a singular villager name\n"
+         << "S: Read all the seasons\n"
+         << "B: Read a season bundle of choice" << endl;
 }

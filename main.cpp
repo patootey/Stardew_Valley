@@ -9,7 +9,7 @@ const int SEASONS = 4;
 
 void readFile(const string &filename);
 void readFileLine(const string &filename, int index);
-void readFileBundle(const string &filename,int index);
+void readFileBundle(const string &filename, int index);
 int countLines(const string &filename);
 void menu();
 
@@ -37,8 +37,9 @@ int main() {
             break;
         case 'B':
             int seasonIndex;
-            seasonIndex = readInt("What season do you want? (Spring/Summer/Fall/Winter)", 1, SEASONS);
-            readFileBundle(foraging_bundle,seasonIndex);
+            seasonIndex =
+                readInt("What season do you want? (Spring/Summer/Fall/Winter)", 1, SEASONS);
+            readFileBundle(foraging_bundle, seasonIndex);
             // print out each bundle to the right season
             break;
         default:
@@ -51,7 +52,7 @@ int main() {
     return 0;
 }
 
-void readFileBundle(const string &filename,int index){
+void readFileBundle(const string &filename, int index) {
     ifstream file(filename);
     string line;
     bool found = false;

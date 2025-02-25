@@ -47,5 +47,5 @@
         "streambuf": "cpp",
         "typeinfo": "cpp"
     },
-    "C_Cpp.clang_format_fallbackStyle": "{BasedOnStyle: LLVM, IndentWidth: 4, ColumnLimit: 90}"
+    "C_Cpp.clang_format_fallbackStyle": "{BasedOnStyle: LLVM, IndentWidth: 4, ColumnLimit: 100}"
 }
